@@ -655,6 +655,6 @@ i += 1       → O(n)
 
 i *= 2       → O(log n)
 
-n work × log n levels
+n work * log n levels
              → O(n log n)
 '''
