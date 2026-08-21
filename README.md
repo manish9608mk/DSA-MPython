@@ -1,6 +1,6 @@
 # DSA-MPython
 
-My Data Structures and Algorithms journey with Python 3.
+Data Structures and Algorithms practice and problem solving.
 
 ## Topics Covered
 
