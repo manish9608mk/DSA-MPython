@@ -1,3 +1,19 @@
+'''
+There are only two questions in DSA:
+                 Algorithm
+                    │
+          ┌─────────┴─────────┐
+          ↓                   ↓
+     How much time?      How much memory?
+          ↓                   ↓
+    Time Complexity      Space Complexity
+
+For interviews, you need to look at code and say:
+Time  → O(?)
+Space → O(?)
+Everything we studied in DSA, supports these two answers
+'''
+
 # Note: DON'T REMEMBER
 
 #1 Big-O
