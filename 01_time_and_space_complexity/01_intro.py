@@ -1,4 +1,13 @@
 '''
+For every DSA problem, we'll keep asking:
+1. What is the brute-force complexity?
+2. Why is it slow?
+3. What observation improves it?
+4. What is the optimal complexity?
+5. Can we reduce time?
+6. Can we reduce space?
+
+
 There are only two questions in DSA:
                  Algorithm
                     │
@@ -12,6 +21,43 @@ For interviews, you need to look at code and say:
 Time  → O(?)
 Space → O(?)
 Everything we studied in DSA, supports these two answers
+
+
+                    DSA
+                     │
+             ┌───────┴───────┐
+             ↓               ↓
+        DATA STRUCTURES    PATTERNS
+             │               │
+     ┌───────┼───────┐       │
+     ↓       ↓       ↓       ↓
+   Array   Linked   Tree   Two Pointer
+           List            Sliding Window
+             │              Prefix Sum
+             ↓              Binary Search
+           Graph            Sorting
+             │
+             ↓
+           Heap
+             │
+             └──────────┐
+                        ↓
+                  Advanced Techniques
+                        │
+                  ┌─────┴─────┐
+                  ↓           ↓
+             Backtracking     DP
+
+As you solve problems, your brain should gradually learn:
+Problem
+   ↓
+What is the constraint?
+   ↓
+What pattern does it suggest?
+   ↓
+Which data structure helps?
+   ↓
+Can I reduce the complexity?            
 '''
 
 # Note: DON'T REMEMBER
