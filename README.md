@@ -7,6 +7,7 @@ Data Structures and Algorithms practice and problem solving.
 - Time & Space Complexity
 - Arrays
 - Strings
+- Hashing
 
 ## Goal
 
