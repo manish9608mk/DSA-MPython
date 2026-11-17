@@ -1,9 +1,10 @@
+# 06. TOP K FREQUENT WORDS
+
+# LeetCode 692: https://leetcode.com/problems/top-k-frequent-words/
+
+# PATTERN: Hash Map frequency counting + Sorting / Heap
+
 """
-06. TOP K FREQUENT WORDS
-LeetCode 692: https://leetcode.com/problems/top-k-frequent-words/
-
-PATTERN: Hash Map frequency counting + Sorting / Heap
-
 PROBLEM
 -------
 Return the k most frequent words.

@@ -2,7 +2,7 @@
 
 Data Structures and Algorithms practice and problem solving.
 
-## Topics Covered
+## Topics
 
 - Time & Space Complexity
 - Arrays
