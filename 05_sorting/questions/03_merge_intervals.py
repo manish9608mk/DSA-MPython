@@ -155,6 +155,13 @@ REVISION CHECKLIST
 [ ] Handle empty input.
 [ ] State O(n log n) time and O(n) result space.
 
+
+INTERVIEW SOLUTION SELECTION
+
+INTERVIEW BEST SOLUTION: Sort by start and scan once. This is the standard optimal solution: O(n log n) overall, with an O(n) scan. Explain the invariant that only the last merged interval can overlap the next one. Use brute-force pair merging only to demonstrate why sorting is better.
+
+ADDITIONAL IMPLEMENTATIONS: Pairwise repeated merging is a valid brute-force baseline but can take O(n³) with repeated comparisons and list deletions. The in-place sort-and-compact version avoids allocating a second result list but mutates the input.
+
 """
 
 def merge_intervals(intervals: list[list[int]]) -> list[list[int]]:
@@ -183,5 +190,57 @@ def run_tests() -> None:
     print("All Merge Intervals test cases passed.")
 
 
+
+# ADDITIONAL APPROACH IMPLEMENTATIONS
+def merge_intervals_pairwise(intervals: list[list[int]]) -> list[list[int]]:
+    """Brute-force baseline: repeatedly merge any overlapping pair."""
+    work = [interval[:] for interval in intervals]
+    changed = True
+    while changed:
+        changed = False
+        for i in range(len(work)):
+            for j in range(i + 1, len(work)):
+                a, b = work[i], work[j]
+                if a[0] <= b[1] and b[0] <= a[1]:
+                    work[i] = [min(a[0], b[0]), max(a[1], b[1])]
+                    work.pop(j)
+                    changed = True
+                    break
+            if changed:
+                break
+    return sorted(work, key=lambda x: x[0])
+
+
+def merge_intervals_in_place(intervals: list[list[int]]) -> list[list[int]]:
+    """Sort and compact the caller's list in-place; output aliases input."""
+    if not intervals:
+        return []
+    intervals.sort(key=lambda x: x[0])
+    write = 0
+    for start, end in intervals[1:]:
+        if start <= intervals[write][1]:
+            intervals[write][1] = max(intervals[write][1], end)
+        else:
+            write += 1
+            intervals[write] = [start, end]
+    del intervals[write + 1:]
+    return intervals
+
+
+def run_additional_tests() -> None:
+    cases = [
+        ([[1, 3], [2, 6], [8, 10], [15, 18]], [[1, 6], [8, 10], [15, 18]]),
+        ([[1, 4], [4, 5]], [[1, 5]]),
+        ([[1, 10], [2, 3], [4, 8]], [[1, 10]]),
+        ([], []),
+        ([[-5, -1], [-3, 0], [2, 4]], [[-5, 0], [2, 4]]),
+    ]
+    for source, expected in cases:
+        assert merge_intervals_pairwise(source) == expected
+        mutable = [x[:] for x in source]
+        assert merge_intervals_in_place(mutable) == expected
+    print("Pairwise and in-place Merge Intervals alternatives passed.")
+
 if __name__ == "__main__":
     run_tests()
+    run_additional_tests()

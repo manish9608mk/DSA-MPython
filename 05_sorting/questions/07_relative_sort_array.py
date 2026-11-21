@@ -145,6 +145,13 @@ REVISION CHECKLIST
 [ ] Append leftovers in ascending order and preserve counts.
 [ ] Explain custom sort-key and counting-array alternatives.
 
+
+INTERVIEW SOLUTION SELECTION
+
+INTERVIEW BEST SOLUTION: For the original bounded-value constraints, a counting array is a strong linear-time answer. For a general integer domain, Counter + emit arr2 order + sorted leftovers is the clearest robust solution. Custom sort key is the simplest one-liner alternative.
+
+ADDITIONAL IMPLEMENTATION: Bounded counting sort uses an offset so it also supports negative values. Its time is O(n+R), where R=max-min+1; use it only when R is moderate.
+
 """
 
 from collections import Counter
@@ -183,5 +190,38 @@ def run_tests() -> None:
     print("All Relative Sort Array test cases passed.")
 
 
+
+# ADDITIONAL APPROACH IMPLEMENTATIONS
+def relative_sort_array_counting(arr1: list[int], arr2: list[int]) -> list[int]:
+    """Counting-array approach; O(n+R) time and O(R) count space."""
+    if not arr1:
+        return []
+    low, high = min(arr1), max(arr1)
+    counts = [0] * (high - low + 1)
+    for value in arr1:
+        counts[value - low] += 1
+    result = []
+    for value in arr2:
+        index = value - low
+        if 0 <= index < len(counts):
+            result.extend([value] * counts[index])
+            counts[index] = 0
+    for offset, count in enumerate(counts):
+        if count:
+            result.extend([low + offset] * count)
+    return result
+
+
+def run_additional_tests() -> None:
+    cases = [
+        ([2, 3, 1, 3, 2, 4, 6, 7, 9, 2, 19], [2, 1, 4, 3, 9, 6], [2, 2, 2, 1, 4, 3, 3, 9, 6, 7, 19]),
+        ([28, 6, 22, 8, 44, 17], [22, 28, 8, 6], [22, 28, 8, 6, 17, 44]),
+        ([-1, 2, -1, 3], [2], [2, -1, -1, 3]),
+    ]
+    for a, b, expected in cases:
+        assert relative_sort_array_counting(a, b) == expected
+    print("Bounded counting-array Relative Sort alternative passed.")
+
 if __name__ == "__main__":
     run_tests()
+    run_additional_tests()

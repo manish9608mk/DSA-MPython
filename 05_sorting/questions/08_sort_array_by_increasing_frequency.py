@@ -135,6 +135,13 @@ REVISION CHECKLIST
 [ ] Test negative values and duplicates.
 [ ] State O(n log n) time.
 
+
+INTERVIEW SOLUTION SELECTION
+
+INTERVIEW BEST SOLUTION: Counter + tuple key `(frequency[value], -value)` is the best first answer: concise, readable, O(n log n), and exactly matches both ordering rules. Grouping by frequency is a useful alternative when you want to build the answer explicitly by frequency.
+
+ADDITIONAL IMPLEMENTATIONS: Repeated nums.count() is a brute-force reference and has O(n²) counting work. Frequency buckets group values by count; sorting each tie group descending preserves the required tie-break.
+
 """
 
 from collections import Counter
@@ -160,5 +167,39 @@ def run_tests() -> None:
     print("All Sort Array by Increasing Frequency test cases passed.")
 
 
+
+# ADDITIONAL APPROACH IMPLEMENTATIONS
+def frequency_sort_bruteforce(nums: list[int]) -> list[int]:
+    """Brute-force key repeatedly counts; intentionally inefficient O(n^2)."""
+    return sorted(nums, key=lambda value: (nums.count(value), -value))
+
+
+def frequency_sort_grouped(nums: list[int]) -> list[int]:
+    """Group by frequency; sort frequency groups ascending and values descending."""
+    from collections import Counter, defaultdict
+    frequency = Counter(nums)
+    groups = defaultdict(list)
+    for value, count in frequency.items():
+        groups[count].append(value)
+    result = []
+    for count in sorted(groups):
+        for value in sorted(groups[count], reverse=True):
+            result.extend([value] * count)
+    return result
+
+
+def run_additional_tests() -> None:
+    cases = [
+        ([1, 1, 2, 2, 2, 3], [3, 1, 1, 2, 2, 2]),
+        ([2, 3, 1, 3, 2], [1, 3, 3, 2, 2]),
+        ([1, 2, 3, 4], [4, 3, 2, 1]),
+        ([-1, 1, -1, 2, 2, 2], [1, -1, -1, 2, 2, 2]),
+    ]
+    for nums, expected in cases:
+        assert frequency_sort_bruteforce(nums) == expected
+        assert frequency_sort_grouped(nums) == expected
+    print("Brute-force key and frequency-grouping alternatives passed.")
+
 if __name__ == "__main__":
     run_tests()
+    run_additional_tests()

@@ -152,6 +152,13 @@ REVISION CHECKLIST
 [ ] Explain duplicates and three-way partition.
 [ ] State average and worst Quickselect complexity.
 
+
+INTERVIEW SOLUTION SELECTION
+
+INTERVIEW BEST SOLUTION: Quickselect is the strongest answer when the interviewer asks for average O(n). Always state the O(n²) worst case. A size-k min heap is often the best practical answer when k is small or values arrive as a stream. Sorting is the simplest baseline.
+
+ADDITIONAL IMPLEMENTATION: A max heap of all values is an alternative heap formulation. It takes O(n) heap construction and O(k log n) to pop k maxima, using O(n) space. It is generally worse than the size-k min heap when k is small.
+
 """
 
 from heapq import heappush, heappop
@@ -218,5 +225,32 @@ def run_tests() -> None:
     print("All Kth Largest Element test cases passed.")
 
 
+
+# ADDITIONAL APPROACH IMPLEMENTATIONS
+def kth_largest_max_heap(nums: list[int], k: int) -> int:
+    """Build a max heap via negatives, then pop k times: O(n + k log n)."""
+    import heapq
+    if not 1 <= k <= len(nums):
+        raise ValueError("k must be between 1 and len(nums)")
+    heap = [-value for value in nums]
+    heapq.heapify(heap)
+    answer = None
+    for _ in range(k):
+        answer = -heapq.heappop(heap)
+    return answer
+
+
+def run_additional_tests() -> None:
+    cases = [
+        ([3, 2, 1, 5, 6, 4], 2, 5),
+        ([3, 2, 3, 1, 2, 4, 5, 5, 6], 4, 4),
+        ([7, 7, 7], 2, 7),
+        ([-3, -1, -2], 3, -3),
+    ]
+    for nums, k, expected in cases:
+        assert kth_largest_max_heap(nums, k) == expected
+    print("Max-heap alternative passed.")
+
 if __name__ == "__main__":
     run_tests()
+    run_additional_tests()

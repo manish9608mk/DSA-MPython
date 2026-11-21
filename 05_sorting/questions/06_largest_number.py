@@ -144,6 +144,13 @@ REVISION CHECKLIST
 [ ] Return a string.
 [ ] Include digit-length work in complexity.
 
+
+INTERVIEW SOLUTION SELECTION
+
+INTERVIEW BEST SOLUTION: Custom comparator with cmp_to_key is the correct interview solution. First show why numeric sorting fails on [3,30], then compare a+b with b+a. A brute-force permutation solution is only a tiny-input baseline; there is no ordinary numeric sort key that replaces the comparator.
+
+ADDITIONAL IMPLEMENTATION: Brute-force permutations enumerate all possible orders and choose the largest concatenated string. This is useful for proving small examples, but factorial time makes it unsuitable beyond tiny n.
+
 """
 
 from functools import cmp_to_key
@@ -182,5 +189,26 @@ def run_tests() -> None:
     print("All Largest Number test cases passed.")
 
 
+
+# ADDITIONAL APPROACH IMPLEMENTATIONS
+def largest_number_bruteforce(nums: list[int]) -> str:
+    """Exponential reference: only use for very small arrays (about n<=8)."""
+    from itertools import permutations
+    if not nums:
+        return ""
+    if any(value < 0 for value in nums):
+        raise ValueError("nums must be non-negative")
+    best = max("".join(map(str, order)) for order in permutations(nums))
+    return "0" if best and best[0] == "0" else best
+
+
+def run_additional_tests() -> None:
+    cases = [([10, 2], "210"), ([3, 30, 34, 5, 9], "9534330"), ([0, 0], "0"), ([12, 121], "12121")]
+    for nums, expected in cases:
+        assert largest_number_bruteforce(nums) == expected
+        assert largest_number(nums) == expected
+    print("Brute-force permutation reference and comparator solution passed.")
+
 if __name__ == "__main__":
     run_tests()
+    run_additional_tests()

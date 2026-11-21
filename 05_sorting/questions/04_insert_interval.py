@@ -153,6 +153,13 @@ REVISION CHECKLIST
 [ ] Explain why endpoint equality merges.
 [ ] Compare linear scan with append-and-sort.
 
+
+INTERVIEW SOLUTION SELECTION
+
+INTERVIEW BEST SOLUTION: Use the three-phase O(n) scan because the input is already sorted and non-overlapping. If the interviewer removes that guarantee, append the new interval, sort, and reuse the Merge Intervals pattern at O(n log n).
+
+ADDITIONAL IMPLEMENTATION: Append + sort + merge is a general fallback. It is easier to derive from Merge Intervals but does extra sorting that the original constraints make unnecessary.
+
 """
 
 def insert_interval(intervals: list[list[int]], new_interval: list[int]) -> list[list[int]]:
@@ -191,5 +198,33 @@ def run_tests() -> None:
     print("All Insert Interval test cases passed.")
 
 
+
+# ADDITIONAL APPROACH IMPLEMENTATIONS
+def insert_interval_sort_merge(intervals: list[list[int]], new_interval: list[int]) -> list[list[int]]:
+    """General fallback when input is not guaranteed sorted/disjoint."""
+    all_intervals = [item[:] for item in intervals]
+    all_intervals.append(new_interval[:])
+    all_intervals.sort(key=lambda x: x[0])
+    merged = []
+    for start, end in all_intervals:
+        if not merged or start > merged[-1][1]:
+            merged.append([start, end])
+        else:
+            merged[-1][1] = max(merged[-1][1], end)
+    return merged
+
+
+def run_additional_tests() -> None:
+    cases = [
+        ([[1, 3], [6, 9]], [2, 5], [[1, 5], [6, 9]]),
+        ([[1, 2], [3, 5], [6, 7], [8, 10], [12, 16]], [4, 8], [[1, 2], [3, 10], [12, 16]]),
+        ([], [5, 7], [[5, 7]]),
+        ([[1, 5]], [2, 3], [[1, 5]]),
+    ]
+    for intervals, new_interval, expected in cases:
+        assert insert_interval_sort_merge(intervals, new_interval) == expected
+    print("Append + sort + merge fallback passed.")
+
 if __name__ == "__main__":
     run_tests()
+    run_additional_tests()

@@ -165,6 +165,13 @@ REVISION CHECKLIST
 [ ] State O(n) time and O(1) extra space.
 [ ] Explain why the algorithm is not necessarily stable.
 
+
+INTERVIEW SOLUTION SELECTION
+
+INTERVIEW BEST SOLUTION: Present Dutch National Flag as the final interview answer: one pass, O(n) time and O(1) extra space. Mention counting sort first as the simpler two-pass linear alternative. The built-in sort is not acceptable because the statement explicitly forbids it.
+
+ADDITIONAL IMPLEMENTATION: A simple reference implementation using Python sorting is useful only to validate outputs; it violates the problem constraint. The two accepted algorithmic approaches in this file are frequency counting and three-way in-place partitioning.
+
 """
 
 def sort_colors_counting(nums: list[int]) -> None:
@@ -212,5 +219,23 @@ def run_tests() -> None:
     print("All Sort Colors test cases passed.")
 
 
+
+# ADDITIONAL APPROACH IMPLEMENTATIONS
+def sort_colors_reference_only(nums: list[int]) -> list[int]:
+    """Correct reference for tests only; NOT a valid submission approach."""
+    return sorted(nums)
+
+
+def run_additional_tests() -> None:
+    cases = [[], [0], [2, 1, 0], [2, 2, 1, 1, 0, 0], [1, 1, 1], [0, 2, 0, 2]]
+    for original in cases:
+        expected = sort_colors_reference_only(original)
+        a, b = original[:], original[:]
+        sort_colors_counting(a)
+        sort_colors_dutch_flag(b)
+        assert a == expected and b == expected
+    print("Sort Colors counting and Dutch National Flag implementations passed.")
+
 if __name__ == "__main__":
     run_tests()
+    run_additional_tests()

@@ -181,6 +181,13 @@ REVISION CHECKLIST
 [ ] Know stable vs unstable algorithms.
 [ ] Distinguish sorted() from list.sort().
 [ ] State time and auxiliary space accurately.
+
+INTERVIEW SOLUTION SELECTION
+
+INTERVIEW BEST SOLUTION: Explain Merge Sort first when a guaranteed O(n log n) bound is required. It is stable and has O(n) auxiliary space. If the interviewer prioritizes constant auxiliary space, follow up with Heap Sort. Quick Sort is a practical average-case option but has O(n²) worst case. In actual Python production code, use list.sort()/sorted() unless implementing the algorithm is the task.
+
+ADDITIONAL IMPLEMENTATIONS: Heap Sort gives O(n log n) worst-case time and O(1) auxiliary space. Counting Sort is linear in n plus the value range and is useful only when that range is reasonably small. Python built-in sorting is included only as a production/reference alternative, not as an implementation answer.
+
 """
 
 
@@ -275,5 +282,64 @@ def run_tests() -> None:
     print("All Sort an Array test cases passed.")
 
 
+
+# ADDITIONAL APPROACH IMPLEMENTATIONS
+def heap_sort(nums: list[int]) -> list[int]:
+    """In-place max-heap sort on a copy: O(n log n), O(1) auxiliary."""
+    arr = nums[:]
+    n = len(arr)
+
+    def sift_down(root: int, size: int) -> None:
+        while True:
+            largest = root
+            left = 2 * root + 1
+            right = left + 1
+            if left < size and arr[left] > arr[largest]:
+                largest = left
+            if right < size and arr[right] > arr[largest]:
+                largest = right
+            if largest == root:
+                return
+            arr[root], arr[largest] = arr[largest], arr[root]
+            root = largest
+
+    # Bottom-up heap construction is O(n), not O(n log n).
+    for root in range(n // 2 - 1, -1, -1):
+        sift_down(root, n)
+
+    for end in range(n - 1, 0, -1):
+        arr[0], arr[end] = arr[end], arr[0]
+        sift_down(0, end)
+
+    return arr
+
+
+def counting_sort_range(nums: list[int], max_range: int = 100_000) -> list[int]:
+    """O(n + range) sorting when max(nums)-min(nums) is small."""
+    if not nums:
+        return []
+    low, high = min(nums), max(nums)
+    span = high - low + 1
+    if span > max_range:
+        raise ValueError("value range is too large for counting sort")
+    counts = [0] * span
+    for value in nums:
+        counts[value - low] += 1
+    result = []
+    for offset, count in enumerate(counts):
+        result.extend([low + offset] * count)
+    return result
+
+
+def run_additional_tests() -> None:
+    cases = [[], [1], [3, 2, 1], [0, -5, 3, -5, 2], [4, 4, 4], list(range(30, -1, -1))]
+    for values in cases:
+        expected = sorted(values)
+        assert heap_sort(values) == expected
+        assert counting_sort_range(values) == expected
+        assert values == values  # all helpers return a sorted copy
+    print("Heap Sort and Counting Sort alternatives passed.")
+
 if __name__ == "__main__":
     run_tests()
+    run_additional_tests()
