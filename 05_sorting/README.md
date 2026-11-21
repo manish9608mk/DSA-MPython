@@ -1,7 +1,5 @@
 # Sorting — Questions and Solutions
 
-These files are designed to sit beside the existing `01_sort_an_array.py` in:
-
 `05_sorting/questions/`
 
 ## Questions
