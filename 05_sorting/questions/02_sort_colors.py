@@ -56,6 +56,115 @@ COMMON MISTAKES
 - Incrementing mid after swapping a 2 with high.
 - Forgetting to decrement high.
 - Creating another array when in-place partitioning is possible.
+
+
+DETAILED STUDY NOTES — READ THIS BEFORE CODING
+
+CORE IDEA
+
+The array has only three categories, so a general-purpose comparison sort is unnecessary. The important decision is whether to use two-pass frequency counting or one-pass three-way partitioning.
+
+
+APPROACH ANALYSIS
+
+APPROACH 1 — BUILT-IN SORT (NOT THE INTENDED ANSWER)
+Call nums.sort(). It gives the correct order, but the problem explicitly asks for an in-place solution without the library sort.
+Time: O(n log n).
+
+APPROACH 2 — COUNTING SORT (SIMPLE LINEAR SOLUTION)
+Count the number of 0s, 1s, and 2s. Rewrite the array with all 0s first, then 1s, then 2s. The count array always has exactly three positions, so its space is O(1).
+Time: O(n), Space: O(1), two passes.
+
+APPROACH 3 — DUTCH NATIONAL FLAG (ONE PASS)
+Maintain four regions: [0, low) contains 0; [low, mid) contains 1; [mid, high] is unknown; (high, n) contains 2. Inspect nums[mid]. For 0, swap with low and advance both low and mid. For 1, advance mid. For 2, swap with high and decrement high; do not advance mid because the incoming value is unknown.
+Time: O(n), Space: O(1). The unknown region shrinks on every iteration.
+
+
+WHY THE RECOMMENDED APPROACH WORKS
+
+The invariant is the proof. Before every iteration, all positions before low are 0, positions from low through mid-1 are 1, and positions after high are 2. The only unclassified region is mid through high. Each branch places nums[mid] into a known region or moves the right boundary inward. When mid > high, the unknown region is empty and the array is sorted.
+
+
+STEP-BY-STEP THINKING
+
+1. Read the constraints and required output carefully.\n2. Identify what ordering rule the problem asks for.\n3. Decide whether general sorting is sufficient or whether the task needs a custom key, greedy ordering, a heap, or a merge-sort counting technique.\n4. State the invariant before writing the loop.\n5. Check duplicates and equality boundaries.\n6. Test the smallest input and a case that exercises the main pattern.
+
+
+DRY RUN — DETAILED WALKTHROUGH
+
+nums = [2,0,2,1,1,0]
+Start: low=0, mid=0, high=5
+
+nums[mid]=2: swap nums[0] and nums[5]
+    [0,0,2,1,1,2], high=4, mid stays 0
+nums[mid]=0: swap nums[0] and nums[0]
+    [0,0,2,1,1,2], low=1, mid=1
+nums[mid]=0: swap nums[1] and nums[1]
+    [0,0,2,1,1,2], low=2, mid=2
+nums[mid]=2: swap nums[2] and nums[4]
+    [0,0,1,1,2,2], high=3, mid stays 2
+nums[mid]=1: mid=3; then mid=4
+Now mid > high. Answer = [0,0,1,1,2,2].
+
+
+EDGE CASES TO TEST
+
+- Empty and one-element arrays.
+- All 0s, all 1s, or all 2s.
+- Already grouped input and reverse-grouped input.
+- Alternating values such as [2,0,1,2,0,1].
+- The original constraints guarantee only 0, 1, and 2; the implementation raises ValueError for another value.
+
+
+COMMON INTERVIEW MISTAKES
+
+1. Incrementing mid after swapping a 2 with high; this skips an unexamined value.
+2. Forgetting to decrement high after placing a 2.
+3. Moving a 1 unnecessarily; it already belongs in the middle region.
+4. Using a set, which removes duplicates.
+5. Claiming stability; Dutch National Flag swaps can change the relative order of equal values.
+
+
+REUSABLE PATTERN TEMPLATE
+
+low = mid = 0
+high = len(nums) - 1
+while mid <= high:
+    if nums[mid] == 0:
+        nums[low], nums[mid] = nums[mid], nums[low]
+        low += 1; mid += 1
+    elif nums[mid] == 1:
+        mid += 1
+    else:
+        nums[mid], nums[high] = nums[high], nums[mid]
+        high -= 1  # mid does not move here
+
+
+COMPLEXITY ANALYSIS
+
+Counting: O(n) time, O(1) auxiliary space, two passes. Dutch National Flag: O(n) time, O(1) auxiliary space, one scan. Every iteration either advances mid or decreases high, so there are at most O(n) iterations.
+
+
+INTERVIEW EXPLANATION — SAY THIS OUT LOUD
+
+"Only three values are present, so I can partition the array into three regions. I use low, mid, and high. Values before low are 0, between low and mid are 1, and after high are 2. A zero moves left, a one stays, and a two moves right. I do not advance mid after a two-swap because the value coming from the right is not yet inspected. The method is O(n) time and O(1) extra space."
+
+
+PATTERN MEMORY
+
+The array has only three categories, so a general-purpose comparison sort is unnecessary. The important decision is whether to use two-pass frequency counting or one-pass three-way partitioning.\n\nRecognize the constraint -> choose the right sorting pattern -> maintain its invariant -> verify edge cases.
+
+
+REVISION CHECKLIST
+
+[ ] Explain the four regions and pointer meanings.
+[ ] Write the counting version.
+[ ] Write the one-pass Dutch National Flag version.
+[ ] Explain why mid does not move after swapping a 2.
+[ ] Dry-run [2,0,2,1,1,0].
+[ ] State O(n) time and O(1) extra space.
+[ ] Explain why the algorithm is not necessarily stable.
+
 """
 
 def sort_colors_counting(nums: list[int]) -> None:
