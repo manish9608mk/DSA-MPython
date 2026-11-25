@@ -38,3 +38,10 @@ Linked List, Stack + Monotonic Stack, Queue + Deque, Binary Tree + BST, Heap + P
 Bit Manipulation, Graphs, Dynamic Programming, Advanced DSA, Math & Number Theory, Design Problems.
 
 Python 3.10+ is recommended (3.12 used).
+
+
+## Guides
+
+- [Interview Preparation Guide](./00_guide/interview_guide.md)
+- [Pattern Cheat Sheet](./00_guide/pattern_cheatsheet_guide.md)
+

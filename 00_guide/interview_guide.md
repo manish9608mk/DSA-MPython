@@ -28,7 +28,7 @@ Formats change by company, role, country and year. **Always follow the recruiter
 2. **Budget time:** about 25 to 30 minutes per problem, leave 10 minutes at the end to re-test.
 3. For each problem: examples → brute force → optimized → code → test the **edge cases** (empty, one element, duplicates, large values).
 4. **Partial credit counts.** A correct brute force that passes some tests beats a half-written optimal solution.
-5. Watch the constraints (`n ≤ 10⁵` means O(n log n)). See `PATTERN_CHEATSHEET.md`.
+5. Watch the constraints (`n ≤ 10⁵` means O(n log n)). See `00_guide/pattern_cheatsheet_guide.md`.
 6. Use only the language features you know well. Standard imports (`heapq`, `collections`, `bisect`) are usually allowed.
 7. Practice in the **same kind of editor** (no autocomplete, no internet). Do 3 full mock OAs before the real one.
 
@@ -76,7 +76,7 @@ Some interviews give you broken code. Habit: **reproduce → read the error → 
 - Week 1 to 2: finish the ⭐ list for arrays, strings, hashing, two pointers, sliding window, binary search.
 - Week 3: trees, graphs (BFS/DFS), linked list, stack; one full mock OA.
 - Week 4: DP basics, heap, greedy; two mock interviews aloud; story bank ready; resume proofread.
-- Day before: sleep, light revision of `PATTERNS.md`, set up the editor and internet, read the invite again.
+- Day before: sleep, light revision of `00_guide/pattern_cheatsheet_guide.md`, set up the editor and internet, read the invite again.
 - After each interview: write down the questions and what went wrong (feeds the error log).
 
 ## 10. Habits that decide results
